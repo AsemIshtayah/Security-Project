@@ -5,6 +5,7 @@
 package com.mycompany.mavenproject1;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -99,6 +100,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jButton3.setText("Upload Result");
+        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -144,6 +146,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jButton6.setText("Save Decrypted Img to Disk");
+        jButton6.setEnabled(false);
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -233,26 +236,44 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        bufferedImageCover = uploadImage(jLabel1, bufferedImageCover);
+        bufferedImageCover = uploadImage(jLabel1);
 //        System.out.println(bufferedImageCover.getWidth());
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        bufferedImageSecrete = uploadImage(jLabel2, bufferedImageSecrete);
+        bufferedImageSecrete = uploadImage(jLabel2);
+        
+        BufferedImage img = bufferedImageSecrete;
+        Image tmp = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(300, 200, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        
+        for(int y = 0; y < dimg.getHeight(); y++){
+            for(int x = 0; x < dimg.getWidth(); x++){
+                List<Integer> listRgbPixel = getRGBPixel(dimg, x, y);
+                int grayColor = ((listRgbPixel.get(0) + listRgbPixel.get(1) + listRgbPixel.get(2))/3);
+                dimg = setRGBPixel(dimg, x, y, grayColor, grayColor, grayColor);
+            }
+        }
+        bufferedImageSecrete = dimg;
+        displayImage(dimg, jLabel2);
     }//GEN-LAST:event_jButton2ActionPerformed
   
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        bufferedImageResult = uploadImage(jLabel3, bufferedImageResult);
+        bufferedImageResult = uploadImage(jLabel3);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try{
             writeToFile(bufferedImageCover, "png", "./asem.png");
         } catch (Exception e){
-            
+            System.out.println(e.getMessage());
         }
         
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -336,7 +357,69 @@ public class NewJFrame extends javax.swing.JFrame {
             for(n = 0; n < bufferedImageSecrete.getHeight(); n++){
                 for(m = 0; m < bufferedImageSecrete.getWidth(); m++){
                     if(numBitEnc == 1){
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
                         
+                        r = (r&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        g = (g&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        b = (b&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
+                        x++;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
+                            y++;
+                        }
+                        
+                        listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        
+                        r = (r&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        g = (g&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        b = (b&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
+                        x++;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
+                            y++;
+                        }
+                        
+                        listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        
+                        r = (r&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        g = (g&254) + arrSecrete[n][m]%2;
+                        arrSecrete[n][m] = arrSecrete[n][m]/2;
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
+                        x++;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
+                            y++;
+                        }
+                                                
                     } else if(numBitEnc == 2){
                         List<Integer> listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
                         int r = listRgbPixel.get(0);
@@ -377,21 +460,22 @@ public class NewJFrame extends javax.swing.JFrame {
                         int r = listRgbPixel.get(0);
                         int g = listRgbPixel.get(1);
                         int b = listRgbPixel.get(2);
-//                        andLogicWith = 0;
-                        r = (r & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
-                        arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
                         
-                        g = (g & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
-                        arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
+                        r = (r&248) + arrSecrete[n][m]%8;
+                        arrSecrete[n][m] = arrSecrete[n][m]/8;
                         
-                        b = (b & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
+                        g = (g&248) + arrSecrete[n][m]%8;
+                        arrSecrete[n][m] = arrSecrete[n][m]/8;
                         
-                        setRGBPixel(bufferedImageCover, x, y, r, g, b); // new values
+                        b = (b&248) + arrSecrete[n][m]%8;
+                        arrSecrete[n][m] = arrSecrete[n][m]/8;
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
                         x++;
-                        if(x == bufferedImageCover.getWidth()){
-                            x =0;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
                             y++;
-//                            if(y == bufferedImageCover.getHeight()) return;
                         }
                     }
                     
@@ -410,6 +494,49 @@ public class NewJFrame extends javax.swing.JFrame {
             for(n = 0; n < 200; n++){
                 for(m = 0; m < 300; m++){
                      if(numBitEnc == 1){
+                         
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
+                        
+                        arrSecrete[n][m] = (r&1) + (g&1)*2 + (b&1)*4;
+                        
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                        
+                        listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        
+                        arrSecrete[n][m] = (r&1)*8 + (g&1)*16 + (b&1)*32;
+                        
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                        
+                        listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        
+                        arrSecrete[n][m] = (r&1)*64 + (g&1)*128;
+                        
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                        
                         
                     } else if(numBitEnc == 2){
                         List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
@@ -441,23 +568,24 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         
                     } else {
-                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, m, n);
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
                         int r = listRgbPixel.get(0);
                         int g = listRgbPixel.get(1);
                         int b = listRgbPixel.get(2);
-                        andLogicWith = 7;
-                        arrSecrete[n][m] = (b & 3)*(int)Math.pow(2, 6) + (g & andLogicWith)*(int)Math.pow(2, 3) + (r & andLogicWith);
+                        
+                        arrSecrete[n][m] = (r&7) + (g&7)*8 + (b&7)*64;
+                        
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
                     }
                 }
             }
-//            System.out.println("arrSecrete");
-//            for(int i = 0 ; i < arrSecrete.length; i++){
-//                for(int j = 0 ; j < arrSecrete[0].length; j++){
-//                    System.out.println(arrSecrete[i][j]);
-//                }
-//            }
-            
-            displayImage(makeBufferedImageFromArray(arrSecrete), jLabel2);
+            bufferedImageSecrete = makeBufferedImageFromArray(arrSecrete);
+            displayImage(bufferedImageSecrete, jLabel2);
             
             
         }
@@ -489,6 +617,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        try{
+            writeToFile(bufferedImageSecrete, "png", "./asem_dec.png");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
@@ -526,7 +659,8 @@ public class NewJFrame extends javax.swing.JFrame {
         });
     }
     
-    public BufferedImage uploadImage(JLabel jLabel, BufferedImage bufferedImage){
+    public BufferedImage uploadImage(JLabel jLabel){
+        BufferedImage bufferedImage = null;
         JFileChooser file = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "bmp");
         file.addChoosableFileFilter(filter);
@@ -546,7 +680,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     public void displayImage(BufferedImage bufferedImage, JLabel jLabel) {
         ImageIcon myImage = new ImageIcon(bufferedImage);
-        ImageIcon imageRepresent = new ImageIcon(bufferedImage);
+//        ImageIcon imageRepresent = new ImageIcon(bufferedImage);
         
         Image img = myImage.getImage();
         Image newImg = img.getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH);
