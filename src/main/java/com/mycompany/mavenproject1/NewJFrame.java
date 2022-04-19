@@ -12,9 +12,12 @@ import java.awt.Image;
 import java.awt.Label;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  *
@@ -34,16 +37,20 @@ public class NewJFrame extends javax.swing.JFrame {
         int textLength = textToHide.length();
         int[] twoBitText = new int[4 * textLength];
         
-        char currentChar = 'a';
-        System.out.println((int)(currentChar));
-        System.out.println("(currentChar >> 6) & 0x3");
-        System.out.println((currentChar >> 6) & 0x3);
-        System.out.println((currentChar >> 4) & 0x3);
-        System.out.println((currentChar >> 2) & 0x3);
-        System.out.println((currentChar) & 0x3);
+//        char currentChar = 'a';
+//        System.out.println((int)(currentChar));
+//        System.out.println("(currentChar >> 6) & 0x3");
+//        System.out.println((currentChar >> 6) & 0x3);
+//        System.out.println((currentChar >> 4) & 0x3);
+//        System.out.println((currentChar >> 2) & 0x3);
+//        System.out.println((currentChar) & 0x3);
         
         
     }
+    public BufferedImage bufferedImageCover = null;
+    public BufferedImage bufferedImageSecrete = null;
+    public BufferedImage bufferedImageResult = null;
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,6 +71,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jButton7 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -91,7 +99,6 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jButton3.setText("Upload Result");
-        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -101,7 +108,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255))));
 
-        jButton4.setText("Save To Disk");
+        jButton4.setText("Save Encrypted Img to Disk");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -129,7 +136,14 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Restore");
+        jButton7.setText("Run");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Save Decrypted Img to Disk");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -150,23 +164,33 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addComponent(jButton3))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 1, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(28, 28, 28))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton6)
+                                    .addComponent(jButton4))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,19 +206,25 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addComponent(jButton3)
                         .addGap(93, 93, 93))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(59, 59, 59)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -206,106 +236,153 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JFileChooser file = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "bmp");
-        file.addChoosableFileFilter(filter);
-        int result = file.showSaveDialog(null);
-        
-        
-        File selectedFile = file.getSelectedFile();
-        BufferedImage imageSelected = null;
-        try {
-            imageSelected = ImageIO.read(selectedFile);
-        } catch (IOException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ImageIcon myImage = new ImageIcon(imageSelected);
-        ImageIcon imageRepresent = new ImageIcon(imageSelected);
-        
-        Image img = myImage.getImage();
-        Image newImg = img.getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH);
-        myImage = new ImageIcon(newImg);
-
-        jLabel1.setIcon(new ImageIcon((myImage.getImage()).getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_SMOOTH)));
-        
+        bufferedImageCover = uploadImage(jLabel1, bufferedImageCover);
+//        System.out.println(bufferedImageCover.getWidth());
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JFileChooser file = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "bmp");
-        file.addChoosableFileFilter(filter);
-        int result = file.showSaveDialog(null);
-        
-        
-        File selectedFile = file.getSelectedFile();
-        BufferedImage imageSelected = null;
-        try {
-            imageSelected = ImageIO.read(selectedFile);
-        } catch (IOException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ImageIcon myImage = new ImageIcon(imageSelected);
-        ImageIcon imageRepresent = new ImageIcon(imageSelected);
-        
-        Image img = myImage.getImage();
-        Image newImg = img.getScaledInstance(jLabel2.getWidth(), jLabel2.getHeight(), Image.SCALE_SMOOTH);
-        myImage = new ImageIcon(newImg);
-
-        jLabel2.setIcon(new ImageIcon((myImage.getImage()).getScaledInstance(jLabel2.getWidth(), jLabel2.getHeight(), Image.SCALE_SMOOTH)));
-        
+        bufferedImageSecrete = uploadImage(jLabel2, bufferedImageSecrete);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+  
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        JFileChooser file = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "bmp");
-        file.addChoosableFileFilter(filter);
-        int result = file.showSaveDialog(null);
-        
-        
-        File selectedFile = file.getSelectedFile();
-        BufferedImage imageSelected = null;
-        try {
-            imageSelected = ImageIO.read(selectedFile);
-        } catch (IOException ex) {
-            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ImageIcon myImage = new ImageIcon(imageSelected);
-        ImageIcon imageRepresent = new ImageIcon(imageSelected);
-        
-        Image img = myImage.getImage();
-        Image newImg = img.getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH);
-        myImage = new ImageIcon(newImg);
-
-        jLabel3.setIcon(new ImageIcon((myImage.getImage()).getScaledInstance(jLabel3.getWidth(), jLabel3.getHeight(), Image.SCALE_SMOOTH)));
-        
+        bufferedImageResult = uploadImage(jLabel3, bufferedImageResult);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         jLabel1.setIcon(null);
+        jLabel2.setIcon(null);
+        jLabel3.setIcon(null);
+        bufferedImageCover = null;
+        bufferedImageSecrete = null;
+        bufferedImageResult = null;
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
-
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        System.out.println(""  +  jComboBox1.getSelectedItem());
+        if(jComboBox1.getSelectedItem().toString().equals("Encrypt")){
+            jButton1.setEnabled(true);
+            jButton2.setEnabled(true);
+            jButton3.setEnabled(false);
+            jButton4.setEnabled(true);
+            jButton6.setEnabled(false);
+        } else{
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(false);
+            jButton3.setEnabled(true);
+            jButton4.setEnabled(false);
+            jButton6.setEnabled(true);
+        }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
-        System.out.println(""  +  jComboBox2.getSelectedItem());
     }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        int andLogicWith = 0;
+        int numBitEnc = 0;
+        // 1 bit Enc, 2 bit Enc, 3 bit Enc
+        if(jComboBox2.getSelectedItem().toString().equals("1 bit Enc")){
+            System.out.println("1 bit Enc");
+            andLogicWith = 254;   //  1111 1110
+            numBitEnc = 1;
+        } else if(jComboBox2.getSelectedItem().toString().equals("2 bit Enc")){
+            System.out.println("2 bit Enc");
+            andLogicWith = 252;   //  1111 1100
+            numBitEnc = 2;
+        } else {
+            System.out.println("3 bit Enc");
+            andLogicWith = 248; //  1111 1000
+            numBitEnc = 3;
+        }
+        
+        
+        if(jComboBox1.getSelectedItem().toString().equals("Encrypt")){
+            System.out.println("Encrypt");
+            
+            
+            int[][] arrSecrete = generateArrayOfGrayPixels(bufferedImageSecrete);
+            
+            int x = 0;
+            int y = 0;
+            int m;
+            int n;
+            
+            for(n = 0; n < bufferedImageSecrete.getHeight(); n++){
+                for(m = 0; m < bufferedImageSecrete.getWidth(); m++){
+                    if(numBitEnc == 1){
+                        
+                    } else if(numBitEnc == 2){
+                        
+                    } else { // numBitEnc == 3
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
+                        
+                        r = (r & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
+                        arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
+                        g = (g & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
+                        arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
+                        b = (b & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b); // new values
+                        x++;
+                        if(x == bufferedImageCover.getWidth()){
+                            x =0;
+                            y++;
+                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                    }
+                    
+                }
+            }
+            displayImage(bufferedImageCover, jLabel3);
+           
+        } else{
+            System.out.println("Decrept");
+            
+        }
+                
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    public String decimalToBinary(int number) {
+        String binary = "";
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        number = number >> 1;
+        binary = (number % 2) + binary;
+        return binary;
+    }
+
+
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -341,6 +418,85 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    public BufferedImage uploadImage(JLabel jLabel, BufferedImage bufferedImage){
+        JFileChooser file = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "bmp");
+        file.addChoosableFileFilter(filter);
+        int result = file.showSaveDialog(null);
+        
+        
+        File selectedFile = file.getSelectedFile();
+//        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(selectedFile);
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        displayImage(bufferedImage, jLabel);
+        return bufferedImage;
+    }
+
+    public void displayImage(BufferedImage bufferedImage, JLabel jLabel) {
+        ImageIcon myImage = new ImageIcon(bufferedImage);
+        ImageIcon imageRepresent = new ImageIcon(bufferedImage);
+        
+        Image img = myImage.getImage();
+        Image newImg = img.getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH);
+        myImage = new ImageIcon(newImg);
+
+        jLabel.setIcon(new ImageIcon((myImage.getImage()).getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH)));
+    }
+    
+    public List<Integer> getRGBPixel(BufferedImage img, int x, int y){
+        List<Integer> RgbPixel = new ArrayList<>();
+        int pixel = img.getRGB(x,y);
+        //Creating a Color object from pixel value
+        Color color = new Color(pixel, true);
+        //Retrieving the R G B values
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+        RgbPixel.add(red);
+        RgbPixel.add(green);
+        RgbPixel.add(blue);
+        return RgbPixel;
+    }
+    
+    public BufferedImage setRGBPixel(BufferedImage img, int x, int y, int red, int green, int blue){        
+        Color color = new Color(red, green, blue);
+        img.setRGB(x, y, color.getRGB());
+        return img;
+    }
+    
+        public int[][] generateArrayOfGrayPixels(BufferedImage bufferedImage) {
+        int[][] secureImg = new int[bufferedImage.getHeight()][bufferedImage.getWidth()];
+        
+        for (int y = 0; y < bufferedImage.getHeight(); y++) {
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                List<Integer> RgbPixel = getRGBPixel(bufferedImage, x, y);
+                secureImg[y][x] = (RgbPixel.get(0) + RgbPixel.get(1) + RgbPixel.get(2)) / 3;
+//                Color c = new Color(RgbPixel.get(0), RgbPixel.get(1), RgbPixel.get(2));
+//                bufferedImage.setRGB(x, y, c.getRGB());
+            }
+        }
+        return secureImg;
+    }
+        
+    public void saveImageFromArray(String dst, int[][] arr) throws IOException{
+        BufferedImage bufferedImage = new BufferedImage(300, 200, BufferedImage.TYPE_BYTE_GRAY);
+        
+        for (int y = 0; y < bufferedImage.getHeight(); y++) {
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                Color c = new Color(arr[y][x]);
+                bufferedImage.setRGB(x, y, c.getRGB());
+            }    
+        }
+        ImageIO.write(bufferedImage, "png", new File(dst));
+            
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -349,6 +505,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
