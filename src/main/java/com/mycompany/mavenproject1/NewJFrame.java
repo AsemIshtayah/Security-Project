@@ -175,10 +175,6 @@ public class NewJFrame extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -186,10 +182,11 @@ public class NewJFrame extends javax.swing.JFrame {
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(28, 28, 28))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton6)
-                                    .addComponent(jButton4))
+                                    .addComponent(jButton4)
+                                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
@@ -224,7 +221,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)))
+                                .addGap(6, 6, 6)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -252,9 +249,18 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        try{
+            writeToFile(bufferedImageCover, "png", "./asem.png");
+        } catch (Exception e){
+            
+        }
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    public void writeToFile(BufferedImage bufferedImage, String filename, String path) throws IOException {
+        // TODO add your handling code here:
+        ImageIO.write(bufferedImage, filename, new File(path));
+    }
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -290,11 +296,22 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+//        int[][] arrSecreteTest = generateArrayOfGrayPixels(bufferedImageSecrete);
+//        for(int a = 0; a < 200; a++){
+//            for(int b = 0; b < 300; b++){
+//                System.out.print(arrSecreteTest[a][b] + " | ");
+//                if(arrSecreteTest[a][b] > 255) {
+//                    System.err.println("more than 255 !!!!!!!!");
+//                    return;
+//                }
+//            }
+//            System.out.println("");
+//        }
         int andLogicWith = 0;
         int numBitEnc = 0;
         // 1 bit Enc, 2 bit Enc, 3 bit Enc
         if(jComboBox2.getSelectedItem().toString().equals("1 bit Enc")){
-            System.out.println("1 bit Enc");
+//            System.out.println("1 bit Enc");
             andLogicWith = 254;   //  1111 1110
             numBitEnc = 1;
         } else if(jComboBox2.getSelectedItem().toString().equals("2 bit Enc")){
@@ -302,18 +319,15 @@ public class NewJFrame extends javax.swing.JFrame {
             andLogicWith = 252;   //  1111 1100
             numBitEnc = 2;
         } else {
-            System.out.println("3 bit Enc");
+//            System.out.println("3 bit Enc");
             andLogicWith = 248; //  1111 1000
             numBitEnc = 3;
         }
         
         
         if(jComboBox1.getSelectedItem().toString().equals("Encrypt")){
-            System.out.println("Encrypt");
-            
-            
+//            System.out.println("Encrypt");
             int[][] arrSecrete = generateArrayOfGrayPixels(bufferedImageSecrete);
-            
             int x = 0;
             int y = 0;
             int m;
@@ -324,17 +338,52 @@ public class NewJFrame extends javax.swing.JFrame {
                     if(numBitEnc == 1){
                         
                     } else if(numBitEnc == 2){
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
+                        
+                        r = (r&252) + arrSecrete[n][m]%4;
+                        arrSecrete[n][m] = arrSecrete[n][m]/4;
+                        
+                        g = (g&252) + arrSecrete[n][m]%4;
+                        arrSecrete[n][m] = arrSecrete[n][m]/4;
+                        
+                        b = (b&252) + arrSecrete[n][m]%4;
+                        arrSecrete[n][m] = arrSecrete[n][m]/4;
+                        
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
+                        x++;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
+                            y++;
+                        }
+                        listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        r = (r&252) + arrSecrete[n][m]%4;
+                        setRGBPixel(bufferedImageCover, x, y, r, g, b);
+                        
+                        x++;
+                        if(x==bufferedImageCover.getWidth()){
+                            x=0;
+                            y++;
+                        }
                         
                     } else { // numBitEnc == 3
                         List<Integer> listRgbPixel = getRGBPixel(bufferedImageCover, x, y);
                         int r = listRgbPixel.get(0);
                         int g = listRgbPixel.get(1);
                         int b = listRgbPixel.get(2);
-                        
+//                        andLogicWith = 0;
                         r = (r & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
                         arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
+                        
                         g = (g & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
                         arrSecrete[n][m] = arrSecrete[n][m]/(int)(Math.pow(2, numBitEnc));
+                        
                         b = (b & andLogicWith) + arrSecrete[n][m]%(int)(Math.pow(2, numBitEnc));
                         
                         setRGBPixel(bufferedImageCover, x, y, r, g, b); // new values
@@ -342,7 +391,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         if(x == bufferedImageCover.getWidth()){
                             x =0;
                             y++;
-                            if(y == bufferedImageCover.getHeight()) return;
+//                            if(y == bufferedImageCover.getHeight()) return;
                         }
                     }
                     
@@ -351,7 +400,65 @@ public class NewJFrame extends javax.swing.JFrame {
             displayImage(bufferedImageCover, jLabel3);
            
         } else{
-            System.out.println("Decrept");
+//            System.out.println("Decrept");
+            int[][] arrSecrete = new int[200][300];
+            int x = 0;
+            int y = 0;
+            int m;
+            int n;
+            
+            for(n = 0; n < 200; n++){
+                for(m = 0; m < 300; m++){
+                     if(numBitEnc == 1){
+                        
+                    } else if(numBitEnc == 2){
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
+                        
+                        arrSecrete[n][m] = (r&3) + (g&3)*4 + (b&3)*16;
+                        
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                        
+                        listRgbPixel = getRGBPixel(bufferedImageResult, x, y);
+                        r = listRgbPixel.get(0);
+                        g = listRgbPixel.get(1);
+                        b = listRgbPixel.get(2);
+                        
+                        arrSecrete[n][m] = arrSecrete[n][m] + (r&3)*64;
+                        x++;
+                        if(x == bufferedImageResult.getWidth()){
+                            x =0;
+                            y++;
+//                            if(y == bufferedImageCover.getHeight()) return;
+                        }
+                        
+                        
+                    } else {
+                        List<Integer> listRgbPixel = getRGBPixel(bufferedImageResult, m, n);
+                        int r = listRgbPixel.get(0);
+                        int g = listRgbPixel.get(1);
+                        int b = listRgbPixel.get(2);
+                        andLogicWith = 7;
+                        arrSecrete[n][m] = (b & 3)*(int)Math.pow(2, 6) + (g & andLogicWith)*(int)Math.pow(2, 3) + (r & andLogicWith);
+                    }
+                }
+            }
+//            System.out.println("arrSecrete");
+//            for(int i = 0 ; i < arrSecrete.length; i++){
+//                for(int j = 0 ; j < arrSecrete[0].length; j++){
+//                    System.out.println(arrSecrete[i][j]);
+//                }
+//            }
+            
+            displayImage(makeBufferedImageFromArray(arrSecrete), jLabel2);
+            
             
         }
                 
@@ -483,16 +590,19 @@ public class NewJFrame extends javax.swing.JFrame {
         return secureImg;
     }
         
-    public void saveImageFromArray(String dst, int[][] arr) throws IOException{
+    public BufferedImage makeBufferedImageFromArray(int[][] arr){
         BufferedImage bufferedImage = new BufferedImage(300, 200, BufferedImage.TYPE_BYTE_GRAY);
-        
+//        System.out.println("arr.length:\t" + arr.length);
         for (int y = 0; y < bufferedImage.getHeight(); y++) {
             for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                Color c = new Color(arr[y][x]);
+//                System.out.println(x+", "+ y+") : " +"(" + arr[y][x] +")");
+                Color c = new Color(arr[y][x],arr[y][x],arr[y][x]);
                 bufferedImage.setRGB(x, y, c.getRGB());
             }    
+//            System.out.println("");
         }
-        ImageIO.write(bufferedImage, "png", new File(dst));
+//        System.out.println(bufferedImage.getWidth() + "," + bufferedImage.getHeight());
+        return bufferedImage;
             
     }
     
