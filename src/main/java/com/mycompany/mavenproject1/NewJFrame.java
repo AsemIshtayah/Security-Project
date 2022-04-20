@@ -523,7 +523,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         g = listRgbPixel.get(1);
                         b = listRgbPixel.get(2);
                         
-                        arrSecrete[n][m] = (r&1)*8 + (g&1)*16 + (b&1)*32;
+                        arrSecrete[n][m] = arrSecrete[n][m] + (r&1)*8 + (g&1)*16 + (b&1)*32;
                         
                         x++;
                         if(x == bufferedImageResult.getWidth()){
@@ -537,7 +537,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         g = listRgbPixel.get(1);
                         b = listRgbPixel.get(2);
                         
-                        arrSecrete[n][m] = (r&1)*64 + (g&1)*128;
+                        arrSecrete[n][m] = arrSecrete[n][m] + (r&1)*64 + (g&1)*128;
                         
                         x++;
                         if(x == bufferedImageResult.getWidth()){
