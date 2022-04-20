@@ -277,7 +277,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try{
-            writeToFile(bufferedImageCover, "png", "./asem.png");
+            writeToFile(bufferedImageCover, "png", "./asem_enc.png");
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
