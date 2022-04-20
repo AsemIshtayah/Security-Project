@@ -80,6 +80,8 @@ public class NewJFrame extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Cover Image appears here");
         jLabel1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255))));
 
         jButton1.setText("Upload Cover");
@@ -90,6 +92,8 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Secrete Image appears here");
         jLabel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255))));
 
         jButton2.setText("Upload Secrete");
@@ -108,6 +112,8 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Result Image appears here");
         jLabel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255))));
 
         jButton4.setText("Save Encrypted Img to Disk");
@@ -288,6 +294,9 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1.setIcon(null);
         jLabel2.setIcon(null);
         jLabel3.setIcon(null);
+        jLabel1.setText("Cover Image appears here");
+        jLabel2.setText("Secrete Image appears here");
+        jLabel3.setText("Result Image appears here");
         bufferedImageCover = null;
         bufferedImageSecrete = null;
         bufferedImageResult = null;
@@ -757,6 +766,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-    byte[] photo = null;
-    String filename = null;
+//    byte[] photo = null;
+//    String filename = null;
 }
